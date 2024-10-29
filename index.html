@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: #fff;
+    }
+    .title {
+      font-size: 3em;
+      font-weight: bold;
+      font-family: 'Comic Sans MS',cursive;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    }
+    .gallery-container {
+      width: 80%;
+      max-width: 800px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .gallery-item {
+      position: relative;
+      flex: 1 1 calc(33.33% - 10px);
+      cursor: pointer;
+    }
+    .gallery-item img {
+      width: 100%;
+      border-radius: 8px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .gallery-item img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 8px;
+    }
+    .lightbox .close, .lightbox .prev, .lightbox .next {
+      position: absolute;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+    .lightbox .close {
+      top: 20px;
+      right: 20px;
+    }
+    .lightbox .prev {
+      left: 10px;
+    }
+    .lightbox .next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Title -->
+  <div class="title">IMAGE GALLERY (by Himanshu Ghosh)</div>
+
+  <!-- Gallery Container -->
+  <div class="gallery-container">
+    <div class="gallery-item"><img src="image1.jpeg" alt="Image 1"></div>
+    <div class="gallery-item"><img src="image2.jpeg" alt="Image 2"></div>
+    <div class="gallery-item"><img src="image3.jpg" alt="Image 3"></div>
+    <div class="gallery-item"><img src="image4.jpg" alt="Image 4"></div>
+    <div class="gallery-item"><img src="image5.jpeg" alt="Image 5"></div>
+    <div class="gallery-item"><img src="image6.jpg" alt="Image 6"></div>
+    <div class="gallery-item"><img src="image7.jpg" alt="Image 7"></div>
+    <div class="gallery-item"><img src="image8.jpg" alt="Image 8"></div>
+    <div class="gallery-item"><img src="image9.png" alt="Image 9"></div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="close" onclick="closeLightbox()">×</span>
+    <span class="prev" onclick="navigateLightbox(-1)">❮</span>
+    <span class="next" onclick="navigateLightbox(1)">❯</span>
+    <img id="lightbox-img" src="" alt="Expanded Image">
+  </div>
+
+  <script>
+    const galleryItems = document.querySelectorAll('.gallery-item img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    let currentIndex = 0;
+
+    // Open lightbox with clicked image
+    galleryItems.forEach((img, index) => {
+      img.addEventListener('click', () => {
+        currentIndex = index;
+        lightboxImg.src = img.src;
+        lightbox.classList.add('active');
+      });
+    });
+
+    // Close lightbox
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+    }
+
+    // Navigate in lightbox
+    function navigateLightbox(direction) {
+      currentIndex = (currentIndex + direction + galleryItems.length) % galleryItems.length;
+      lightboxImg.src = galleryItems[currentIndex].src;
+    }
+
+    // Close lightbox on outside click
+    lightbox.addEventListener('click', (e) => {
+      if (e.target !== lightboxImg && e.target !== document.querySelector('.next') && e.target !== document.querySelector('.prev')) {
+        closeLightbox();
+      }
+    });
+  </script>
+
+</body>
+</html>
